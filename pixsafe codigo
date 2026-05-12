@@ -1,0 +1,187 @@
+import java.util.Scanner;
+
+class Conta {
+    String nome;
+    String ChavePix;
+    double saldo;
+}
+
+class TrasacaoPix {
+    double valor;
+    String dentinatario;
+    String horario;
+    boolean suspeita;
+}
+
+class DetectorFraude {
+    public static int CalculadorFraude(double valor, String horario) {
+
+        int risco = 0;
+
+        if (valor >= 5000) {
+            risco += 40;
+        }
+
+        if (horario.equalsIgnoreCase("4")) {
+            risco += 20;
+        }
+
+        return risco;
+    }
+}
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        Conta u = new Conta();
+        TrasacaoPix p = new TrasacaoPix();
+
+        int escolha;
+
+        do {
+            System.out.println("escolha uma opção ");
+            System.out.println("1-criar conta ");
+            System.out.println("2-fazer pix ");
+            System.out.println("3-ver historico");
+            System.out.println("0-sair");
+
+            escolha = sc.nextInt();
+            sc.nextLine();
+
+            switch (escolha) {
+
+                case 1:
+                    System.out.println("informe seu nome");
+                    u.nome = sc.nextLine();
+
+                    System.out.println("informe a sua chave pix");
+                    u.ChavePix = sc.nextLine();
+
+                    System.out.println("informe o saldo ");
+                    u.saldo = sc.nextDouble();
+
+                    break;
+
+                case 2:
+                    System.out.println("informe o valor da transferencia ");
+                    p.valor = sc.nextDouble();
+
+                    if (p.valor > u.saldo) {
+
+                        System.out.println("saldo insuficimete para translação");
+
+                    } else {
+
+                        System.out.println("informe o detsinatario");
+                        sc.nextLine();
+                        p.dentinatario = sc.nextLine();
+
+                        boolean horarioValido = false;
+
+                        do {
+
+                            System.out.println("informe o horario da trasferencia");
+                            System.out.println("1 - manhã");
+                            System.out.println("2 - tarde");
+                            System.out.println("3 - noite");
+                            System.out.println("4 - madrugada");
+                            System.out.println("0 - cancelar");
+
+                            p.horario = sc.nextLine();
+
+                            switch (p.horario) {
+
+                                case "1":
+                                    System.out.println("manha");
+                                    horarioValido = true;
+                                    break;
+
+                                case "2":
+                                    System.out.println("tarde");
+                                    horarioValido = true;
+                                    break;
+
+                                case "3":
+                                    System.out.println("noite");
+                                    horarioValido = true;
+                                    break;
+
+                                case "4":
+                                    System.out.println("madrugada");
+                                    horarioValido = true;
+                                    break;
+
+                                case "0":
+                                    System.out.println("transferencia cancelada");
+                                    horarioValido = true;
+                                    break;
+
+                                default:
+                                    System.out.println("digito invalido");
+                            }
+
+                        } while (!horarioValido);
+
+                        if (!p.horario.equals("0")) {
+
+                            int risco = DetectorFraude.CalculadorFraude(p.valor, p.horario);
+
+                            if (risco >= 80) {
+
+                                p.suspeita = true;
+                                System.out.println("traslação bloqueada");
+
+                            } else if (risco >= 60) {
+
+                                p.suspeita = true;
+                                System.out.println("translação suspeita ");
+
+                                System.out.println("deseja continuar? S OU N");
+                                String decisao = sc.nextLine();
+
+                                if (decisao.equalsIgnoreCase("S")) {
+
+                                    u.saldo = u.saldo - p.valor;
+                                    System.out.println("pix realizado");
+                                    System.out.println("saldo restante: " + u.saldo);
+
+                                } else {
+
+                                    System.out.println("pix cancelado ");
+                                }
+
+                            } else {
+
+                                u.saldo = u.saldo - p.valor;
+                                System.out.println("o saldo restante é " + u.saldo);
+                            }
+                        }
+                    }
+
+                    break;
+
+                case 3:
+                    System.out.println("ultima transferencia");
+                    System.out.println("destinatario: " + p.dentinatario);
+                    System.out.println("valor: " + p.valor);
+
+                    if (p.suspeita) {
+                        System.out.println("status: SUSPEITA");
+                    } else {
+                        System.out.println("status: NORMAL");
+                    }
+
+                    break;
+
+                case 0:
+                    System.out.println("sair");
+                    break;
+            }
+
+        } while (escolha != 0);
+
+        sc.close();
+    }
+}
