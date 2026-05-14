@@ -41,11 +41,14 @@ public class Main {
         int escolha;
 
         do {
+            System.out.println("---------------------");
             System.out.println("escolha uma opção ");
             System.out.println("1-criar conta ");
             System.out.println("2-fazer pix ");
             System.out.println("3-ver historico");
+            System.out.println("4 - informações  ");
             System.out.println("0-sair");
+            System.out.println("---------------------");
 
             escolha = sc.nextInt();
             sc.nextLine();
@@ -145,7 +148,7 @@ public class Main {
 
                                     u.saldo = u.saldo - p.valor;
                                     System.out.println("pix realizado");
-                                    System.out.println("saldo restante: " + u.saldo);
+                                    System.out.printf("saldo restante: R$%.2f\n" + u.saldo);
 
                                 } else {
 
@@ -153,9 +156,9 @@ public class Main {
                                 }
 
                             } else {
-
+                                System.out.println("---------------------");
                                 u.saldo = u.saldo - p.valor;
-                                System.out.println("o saldo restante é " + u.saldo);
+                                System.out.printf("o saldo restante é: R$%.2f\n" , u.saldo);
                             }
                         }
                     }
@@ -163,24 +166,40 @@ public class Main {
                     break;
 
                 case 3:
+                    System.out.println("---------------------");
                     System.out.println("ultima transferencia");
-                    System.out.println("destinatario: " + p.dentinatario);
-                    System.out.println("valor: " + p.valor);
+                    System.out.println("---------------------");
+                    if (p.dentinatario==null){
+                        System.out.println("sem historico");
+                    }else {
+                        System.out.println("destinatario: " + p.dentinatario);
+                        System.out.println("valor: " + p.valor);
 
-                    if (p.suspeita) {
-                        System.out.println("status: SUSPEITA");
-                    } else {
-                        System.out.println("status: NORMAL");
+
+                        if (p.suspeita) {
+                            System.out.println("status:CANCELADA ");
+                        } else {
+                            System.out.println("status: EFETUADA ");
+                        }
                     }
-
                     break;
+                case 4:
 
+                    if (u.nome == null){
+                        System.out.println("sem conta criada ");
+                    }else {
+                        System.out.println(u.nome);
+                        System.out.println("chave pix :" + u.ChavePix);
+                        System.out.printf("SALDO R$:%.2f\n", u.saldo);
+                    }
+                        break;
                 case 0:
-                    System.out.println("sair");
+                    System.out.println("SAINDO ");
                     break;
             }
 
         } while (escolha != 0);
+
 
         sc.close();
     }
